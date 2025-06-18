@@ -1,0 +1,32 @@
+CREATE DATABASE NutzerAdresse;
+USE NutzerAdresse;
+
+CREATE TABLE Nutzer (
+    NutzerID INT PRIMARY KEY IDENTITY(1,1),
+    Vorname NVARCHAR(100),
+    Nachname NVARCHAR(100),
+    Anrede NVARCHAR(20),
+    istAktiv BIT,
+    UrlaubVon DATE,
+    UrlaubBis DATE,
+    RolleDesNutzers NVARCHAR(100)
+);
+
+CREATE TABLE Adresse (
+    AdresseID INT PRIMARY KEY IDENTITY(1,1),
+    Bezeichnung NVARCHAR(200),
+    Straße NVARCHAR(200),
+    Hausnummer NVARCHAR(20),
+    Postleitzahl NVARCHAR(20),
+    Land NVARCHAR(100),
+    Iban NVARCHAR(34),  
+    Bic NVARCHAR(11),  
+    istInsolvent BIT,
+    istAktiv BIT,
+    AnsprechpartnerName NVARCHAR(200),
+    AnsprechpartnerTelefonnummer NVARCHAR(50),
+    RechnungsadresseAnschrift NVARCHAR(200),
+    RechnungsadresseStraße NVARCHAR(200),
+    RechnungsadressePostleitzahl NVARCHAR(20),
+    RechnungsadresseLand NVARCHAR(100)
+);
