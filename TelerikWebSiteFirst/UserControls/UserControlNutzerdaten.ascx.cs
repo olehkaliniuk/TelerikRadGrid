@@ -56,6 +56,8 @@ namespace UserControls
             new Repository().NutzerLoeschen(id);
         }
 
+
+        //get DateTime from RadDatePicker
         private DateTime? GetDate(GridEditableItem item, string column)
         {
             var picker = item[column].Controls[0] as Telerik.Web.UI.RadDatePicker;
