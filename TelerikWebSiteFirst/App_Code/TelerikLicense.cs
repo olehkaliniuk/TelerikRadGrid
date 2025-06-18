@@ -1,0 +1,1 @@
+﻿// Telerik UI for ASP.NET AJAX requires a script key to be embedded in the source code of the application. Please, visit https://www.telerik.com/products/aspnet-ajax/documentation/licensing/license-key for more information.
