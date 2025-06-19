@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
+using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
 
 
 public class RepNutzer
@@ -86,6 +88,37 @@ public class RepNutzer
             cmd.ExecuteNonQuery();
         }
     }
+
+
+    public bool NutzerExistiert(string vorname, string nachname)
+    {
+        using (var conn = new SqlConnection(_cs))
+        using (var cmd = new SqlCommand("SELECT 1 FROM Nutzer WHERE Vorname = @Vorname AND Nachname = @Nachname", conn))
+        {
+            cmd.Parameters.AddWithValue("@Vorname", vorname);
+            cmd.Parameters.AddWithValue("@Nachname", nachname);
+            conn.Open();
+            return cmd.ExecuteScalar()  != null;
+        }
+    }
+
+    public int HoleNutzerId(string vorname, string nachname)
+    {
+        using (var conn = new SqlConnection(_cs))
+        using (var cmd = new SqlCommand("SELECT Id FROM Nutzer WHERE Vorname = @Vorname AND Nachname = @Nachname", conn))
+        {
+            cmd.Parameters.AddWithValue("@Vorname", vorname);
+            cmd.Parameters.AddWithValue("@Nachname", nachname);
+            conn.Open ();
+            var result = cmd.ExecuteScalar();
+            return result != null ? System.Convert.ToInt32(result) : 0;
+        }
+    }
+
+
+
+
+
 
     public void NutzerLoeschen(int id)
     {

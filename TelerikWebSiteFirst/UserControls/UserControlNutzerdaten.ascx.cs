@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.UI;
 using Telerik.Web.UI;
 using Telerik.Web.UI.Skins;
 
@@ -28,10 +29,27 @@ namespace UserControls
             };
 
 
-         
+
+            var repo = new RepNutzer();
+
+            if(repo.NutzerExistiert(nutzer.Vorname, nutzer.Nachname))
+            {
+                int idAlt = repo.HoleNutzerId(nutzer.Vorname, nutzer.Nachname);
+                if (idAlt > 0) 
+                {
+                    repo.NutzerLoeschen(idAlt);
+                
+                }    
+
+            }
+
+
+           
 
             new RepNutzer().NutzerHinzufuegen(nutzer);
         }
+
+        
 
         protected void RadGrid1_UpdateCommand(object sender, GridCommandEventArgs e)
         {
