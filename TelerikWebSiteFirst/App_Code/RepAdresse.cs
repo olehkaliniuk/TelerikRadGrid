@@ -1,105 +1,12 @@
-Ôªøusing System;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 
-public class Repository
+
+public class RepAdresse
 {
     private readonly string _cs = ConfigurationManager.ConnectionStrings["TelerikWebSiteFirstConnectionString"].ConnectionString;
-
-
-
-
-    //Nutzer
-    public List<Nutzer> GetAlleNutzer()
-    {
-        var list = new List<Nutzer>();
-
-        using (var conn = new SqlConnection(_cs))
-        using (var cmd = new SqlCommand("SELECT * FROM Nutzer", conn))
-        {
-            conn.Open();
-            using (var rdr = cmd.ExecuteReader())
-            {
-                while (rdr.Read())
-                {
-                    list.Add(new Nutzer
-                    {
-                        Id = (int)rdr["Id"],                  
-                        Vorname = rdr["Vorname"].ToString(),
-                        Nachname = rdr["Nachname"].ToString(),
-                        Anrede = rdr["Anrede"].ToString(),
-                        IstAktiv = (bool)rdr["IstAktiv"],
-                        UrlaubVon = rdr["UrlaubVon"] as DateTime?,
-                        UrlaubBis = rdr["UrlaubBis"] as DateTime?,
-                        RolleDesNutzers = rdr["RolleDesNutzers"].ToString()
-                    });
-                }
-            }
-        }
-        return list;
-    }
-
-    public void NutzerHinzufuegen(Nutzer n)
-    {
-        using (var conn = new SqlConnection(_cs))
-        using (var cmd = new SqlCommand(
-            @"INSERT INTO Nutzer
-            (Vorname, Nachname, Anrede, IstAktiv, UrlaubVon, UrlaubBis, RolleDesNutzers)
-            VALUES (@Vorname, @Nachname, @Anrede, @IstAktiv, @UrlaubVon, @UrlaubBis, @RolleDesNutzers)", conn))
-        {
-            cmd.Parameters.AddWithValue("@Vorname", n.Vorname);
-            cmd.Parameters.AddWithValue("@Nachname", n.Nachname);
-            cmd.Parameters.AddWithValue("@Anrede", n.Anrede);
-            cmd.Parameters.AddWithValue("@IstAktiv", n.IstAktiv);
-            cmd.Parameters.AddWithValue("@UrlaubVon", (object)n.UrlaubVon ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("@UrlaubBis", (object)n.UrlaubBis ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("@RolleDesNutzers", n.RolleDesNutzers);
-
-            conn.Open();
-            cmd.ExecuteNonQuery();
-        }
-    }
-
-    public void NutzerAktualisieren(Nutzer n)
-    {
-        using (var conn = new SqlConnection(_cs))
-        using (var cmd = new SqlCommand(
-            @"UPDATE Nutzer SET
-                Vorname = @Vorname,
-                Nachname = @Nachname,
-                Anrede = @Anrede,
-                IstAktiv = @IstAktiv,
-                UrlaubVon = @UrlaubVon,
-                UrlaubBis = @UrlaubBis,
-                RolleDesNutzers = @RolleDesNutzers
-              WHERE Id = @Id", conn))
-        {
-            cmd.Parameters.AddWithValue("@Id", n.Id);
-            cmd.Parameters.AddWithValue("@Vorname", n.Vorname);
-            cmd.Parameters.AddWithValue("@Nachname", n.Nachname);
-            cmd.Parameters.AddWithValue("@Anrede", n.Anrede);
-            cmd.Parameters.AddWithValue("@IstAktiv", n.IstAktiv);
-            cmd.Parameters.AddWithValue("@UrlaubVon", (object)n.UrlaubVon ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("@UrlaubBis", (object)n.UrlaubBis ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("@RolleDesNutzers", n.RolleDesNutzers);
-
-            conn.Open();
-            cmd.ExecuteNonQuery();
-        }
-    }
-
-    public void NutzerLoeschen(int id)
-    {
-        using (var conn = new SqlConnection(_cs))
-        using (var cmd = new SqlCommand("DELETE FROM Nutzer WHERE Id = @Id", conn))
-        {
-            cmd.Parameters.AddWithValue("@Id", id);
-
-            conn.Open();
-            cmd.ExecuteNonQuery();
-        }
-    }
 
 
 
@@ -132,9 +39,10 @@ public class Repository
                         AnsprechpartnerName = rdr["AnsprechpartnerName"].ToString(),
                         AnsprechpartnerTelefonnummer = rdr["AnsprechpartnerTel"].ToString(),
                         RechnungsadresseAnschrift = rdr["RechnungsAnschrift"].ToString(),
-                        RechnungsadresseStra√üe = rdr["RechnungsStrasse"].ToString(),
+                        RechnungsadresseStraﬂe = rdr["RechnungsStrasse"].ToString(),
                         RechnungsadressePostleitzahl = rdr["RechnungsPLZ"].ToString(),
-                        RechnungsadresseLand = rdr["RechnungsLand"].ToString()
+                        RechnungsadresseLand = rdr["RechnungsLand"].ToString(),
+                        Stadt = rdr["Stadt"].ToString()
                     });
                 }
             }
@@ -151,11 +59,11 @@ public class Repository
         using (var cmd = new SqlCommand(@"INSERT INTO Adresse 
         (Bezeichnung, Strasse, Hausnummer, PLZ, Land, IBAN, BIC, IstInsolvent, IstAktiv,
          AnsprechpartnerName, AnsprechpartnerTel, RechnungsAnschrift, RechnungsStrasse,
-         RechnungsPLZ, RechnungsLand)
+         RechnungsPLZ, RechnungsLand, Stadt)
         VALUES
         (@Bezeichnung, @Strasse, @Hausnummer, @PLZ, @Land, @IBAN, @BIC, @IstInsolvent, @IstAktiv,
          @AnsprechpartnerName, @AnsprechpartnerTel, @RechnungsAnschrift, @RechnungsStrasse,
-         @RechnungsPLZ, @RechnungsLand)", conn))
+         @RechnungsPLZ, @RechnungsLand, @Stadt)", conn))
         {
             cmd.Parameters.AddWithValue("@Bezeichnung", a.Bezeichnung);
             cmd.Parameters.AddWithValue("@Strasse", a.Strasse);
@@ -169,9 +77,10 @@ public class Repository
             cmd.Parameters.AddWithValue("@AnsprechpartnerName", a.AnsprechpartnerName);
             cmd.Parameters.AddWithValue("@AnsprechpartnerTel", a.AnsprechpartnerTelefonnummer);
             cmd.Parameters.AddWithValue("@RechnungsAnschrift", a.RechnungsadresseAnschrift);
-            cmd.Parameters.AddWithValue("@RechnungsStrasse", a.RechnungsadresseStra√üe);
+            cmd.Parameters.AddWithValue("@RechnungsStrasse", a.RechnungsadresseStraﬂe);
             cmd.Parameters.AddWithValue("@RechnungsPLZ", a.RechnungsadressePostleitzahl);
             cmd.Parameters.AddWithValue("@RechnungsLand", a.RechnungsadresseLand);
+            cmd.Parameters.AddWithValue("@Stadt", a.Stadt);
 
             conn.Open();
             cmd.ExecuteNonQuery();
@@ -188,7 +97,7 @@ public class Repository
         IstInsolvent = @IstInsolvent, IstAktiv = @IstAktiv,
         AnsprechpartnerName = @AnsprechpartnerName, AnsprechpartnerTel = @AnsprechpartnerTel,
         RechnungsAnschrift = @RechnungsAnschrift, RechnungsStrasse = @RechnungsStrasse,
-        RechnungsPLZ = @RechnungsPLZ, RechnungsLand = @RechnungsLand
+        RechnungsPLZ = @RechnungsPLZ, RechnungsLand = @RechnungsLand, Stadt = @Stadt
         WHERE Id = @Id", conn))
         {
             cmd.Parameters.AddWithValue("@Id", a.Id);
@@ -204,9 +113,10 @@ public class Repository
             cmd.Parameters.AddWithValue("@AnsprechpartnerName", a.AnsprechpartnerName);
             cmd.Parameters.AddWithValue("@AnsprechpartnerTel", a.AnsprechpartnerTelefonnummer);
             cmd.Parameters.AddWithValue("@RechnungsAnschrift", a.RechnungsadresseAnschrift);
-            cmd.Parameters.AddWithValue("@RechnungsStrasse", a.RechnungsadresseStra√üe);
+            cmd.Parameters.AddWithValue("@RechnungsStrasse", a.RechnungsadresseStraﬂe);
             cmd.Parameters.AddWithValue("@RechnungsPLZ", a.RechnungsadressePostleitzahl);
             cmd.Parameters.AddWithValue("@RechnungsLand", a.RechnungsadresseLand);
+            cmd.Parameters.AddWithValue("@Stadt", a.Stadt);
 
             conn.Open();
             cmd.ExecuteNonQuery();
@@ -225,11 +135,4 @@ public class Repository
             cmd.ExecuteNonQuery();
         }
     }
-
-
-
-
-
-
-
 }

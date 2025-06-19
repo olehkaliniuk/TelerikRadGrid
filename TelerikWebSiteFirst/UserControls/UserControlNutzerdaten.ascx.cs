@@ -9,7 +9,7 @@ namespace UserControls
     {
         protected void RadGrid1_NeedDataSource(object sender, GridNeedDataSourceEventArgs e)
         {
-            var repo = new Repository();
+            var repo = new RepNutzer();
             RadGrid1.DataSource = repo.GetAlleNutzer();
         }
 
@@ -27,7 +27,10 @@ namespace UserControls
                 RolleDesNutzers = (edit["RolleDesNutzers"].Controls[0] as System.Web.UI.WebControls.TextBox).Text
             };
 
-            new Repository().NutzerHinzufuegen(nutzer);
+
+         
+
+            new RepNutzer().NutzerHinzufuegen(nutzer);
         }
 
         protected void RadGrid1_UpdateCommand(object sender, GridCommandEventArgs e)
@@ -47,13 +50,13 @@ namespace UserControls
                 RolleDesNutzers = (edit["RolleDesNutzers"].Controls[0] as System.Web.UI.WebControls.TextBox).Text
             };
 
-            new Repository().NutzerAktualisieren(nutzer);
+            new RepNutzer().NutzerAktualisieren(nutzer);
         }
 
         protected void RadGrid1_DeleteCommand(object sender, GridCommandEventArgs e)
         {
             int id = (int)((GridDataItem)e.Item).GetDataKeyValue("Id");
-            new Repository().NutzerLoeschen(id);
+            new RepNutzer().NutzerLoeschen(id);
         }
 
 

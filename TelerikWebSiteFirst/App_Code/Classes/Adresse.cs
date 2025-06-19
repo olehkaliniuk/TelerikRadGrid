@@ -21,4 +21,5 @@ public class Adresse
     public string RechnungsadresseStraße { get; set; }
     public string RechnungsadressePostleitzahl { get; set; }
     public string RechnungsadresseLand { get; set; }
+    public string Stadt {  get; set; }
 }

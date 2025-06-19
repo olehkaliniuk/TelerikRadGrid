@@ -9,7 +9,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <link href="style/main.css" rel="stylesheet" type="text/css" />
+    <link href="style/main2.css" rel="stylesheet" type="text/css" />
     <title></title>
     <telerik:RadStyleSheetManager id="RadStyleSheetManager1" runat="server" />
 </head>
@@ -27,9 +27,9 @@
     </script>
     <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
     </telerik:RadAjaxManager>
-    <div>
+    <div class="form2">
 
-          <telerik:RadTabStrip ID="RadTabStrip1" runat="server" MultiPageID="RadMultiPage1">
+          <telerik:RadTabStrip ID="RadTabStrip1" runat="server" MultiPageID="RadMultiPage1" >
             <Tabs>
                 <telerik:RadTab Text="Nutzerdaten" PageViewID="UserTab" />
                 <telerik:RadTab Text="Adressverwaltung" PageViewID="AddressTab" />
@@ -37,7 +37,7 @@
         </telerik:RadTabStrip>
 
   
-         <telerik:RadMultiPage ID="RadMultiPage1" runat="server" SelectedIndex="0">
+         <telerik:RadMultiPage ID="RadMultiPage1" runat="server" SelectedIndex="0" >
        <!--Nutzer!-->
             <telerik:RadPageView ID="UserTab" runat="server">
                 <uc1:UserControlNutzerdaten ID="UserControlNutzerdaten1" runat="server" />

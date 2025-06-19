@@ -33,6 +33,9 @@
                 <telerik:GridBoundColumn DataField="Land"
                                          HeaderText="Land"
                                          UniqueName="Land" />
+                <telerik:GridBoundColumn DataField="Stadt"
+                                         HeaderText="Stadt"
+                                         UniqueName="Stadt" />
                 <telerik:GridBoundColumn DataField="Iban"
                                          HeaderText="IBAN"
                                          UniqueName="Iban" />

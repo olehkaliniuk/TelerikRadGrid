@@ -10,15 +10,14 @@ namespace UserControls
     {
         protected void RadGridAdresse_NeedDataSource(object sender, GridNeedDataSourceEventArgs e)
         {
-            var repo = new Repository();
+            var repo = new RepAdresse();
             RadGridAdresse.DataSource = repo.GetAllAdress();
         }
-
 
         protected void RadGridAdresse_InsertCommand(object sender, GridCommandEventArgs e)
         {
             var editableItem = (GridEditableItem)e.Item;
-            var repo = new Repository();
+            var repo = new RepAdresse();
 
             Adresse a = new Adresse
             {
@@ -37,6 +36,7 @@ namespace UserControls
                 RechnungsadresseStraﬂe = (editableItem["RechnungsadresseStraﬂe"].Controls[0] as TextBox).Text,
                 RechnungsadressePostleitzahl = (editableItem["RechnungsadressePostleitzahl"].Controls[0] as TextBox).Text,
                 RechnungsadresseLand = (editableItem["RechnungsadresseLand"].Controls[0] as TextBox).Text,
+                Stadt = (editableItem["Stadt"].Controls[0] as TextBox).Text,
             };
 
             repo.AdresseHinzufuegen(a);
@@ -46,7 +46,7 @@ namespace UserControls
         protected void RadGridAdresse_UpdateCommand(object sender, GridCommandEventArgs e)
         {
             var editableItem = (GridEditableItem)e.Item;
-            var repo = new Repository();
+            var repo = new RepAdresse();
 
             Adresse a = new Adresse
             {
@@ -66,6 +66,7 @@ namespace UserControls
                 RechnungsadresseStraﬂe = (editableItem["RechnungsadresseStraﬂe"].Controls[0] as TextBox).Text,
                 RechnungsadressePostleitzahl = (editableItem["RechnungsadressePostleitzahl"].Controls[0] as TextBox).Text,
                 RechnungsadresseLand = (editableItem["RechnungsadresseLand"].Controls[0] as TextBox).Text,
+                Stadt = (editableItem["Stadt"].Controls[0] as TextBox).Text,
             };
 
             repo.AdresseAktualisieren(a);
@@ -77,7 +78,7 @@ namespace UserControls
         {
             var item = (GridDataItem)e.Item;
             int id = Convert.ToInt32(item.GetDataKeyValue("Id"));
-            var repo = new Repository();
+            var repo = new RepAdresse();
             repo.AdresseLoeschen(id);
         }
 
