@@ -1,4 +1,4 @@
-<%@ Control Language="C#" AutoEventWireup="true" CodeFile="UserControlAdressverwaltung.ascx.cs" Inherits="UserControls.UserControlAdressverwaltung" %>
+ï»¿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="UserControlAdressverwaltung.ascx.cs" Inherits="UserControls.UserControlAdressverwaltung" %>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 
 <div class="grid-container">
@@ -12,7 +12,8 @@
         OnInsertCommand="RadGridAdresse_InsertCommand"
         OnUpdateCommand="RadGridAdresse_UpdateCommand"
         OnDeleteCommand="RadGridAdresse_DeleteCommand"
-        DataKeyNames="Id">
+        DataKeyNames="Id"
+        >
 
         <MasterTableView CommandItemDisplay="Top"
                          EditMode="EditForms"
@@ -22,7 +23,7 @@
                                          HeaderText="Bezeichnung"
                                          UniqueName="Bezeichnung" />
                 <telerik:GridBoundColumn DataField="Strasse"
-                                         HeaderText="Straße"
+                                         HeaderText="StraÃŸe"
                                          UniqueName="Strasse" />
                 <telerik:GridBoundColumn DataField="Hausnummer"
                                          HeaderText="Hausnummer"
@@ -30,9 +31,27 @@
                 <telerik:GridBoundColumn DataField="Postleitzahl"
                                          HeaderText="Postleitzahl"
                                          UniqueName="Postleitzahl" />
-                <telerik:GridBoundColumn DataField="Land"
-                                         HeaderText="Land"
-                                         UniqueName="Land" />
+                
+
+
+                <telerik:GridTemplateColumn DataField="Land"
+                    HeaderText="Land"
+                    UniqueName="Land">
+                    <EditItemTemplate>
+                        <asp:DropDownList ID="ddlLand" runat="server">
+                            <asp:ListItem Text="DE" Value="DE" />
+                            <asp:ListItem Text="USA" Value="USA" />
+                            <asp:ListItem Text="UK" Value="UK" />
+                        </asp:DropDownList>
+                    </EditItemTemplate>
+                    <ItemTemplate>
+                        <%# Eval("Land") %>
+                    </ItemTemplate>
+                </telerik:GridTemplateColumn>
+
+
+
+
                 <telerik:GridBoundColumn DataField="Stadt"
                                          HeaderText="Stadt"
                                          UniqueName="Stadt" />
@@ -59,9 +78,9 @@
                 <telerik:GridBoundColumn DataField="RechnungsadresseAnschrift"
                                          HeaderText="Rechnungsanschrift"
                                          UniqueName="RechnungsadresseAnschrift" />
-                <telerik:GridBoundColumn DataField="RechnungsadresseStraße"
-                                         HeaderText="Rechnungsstraße"
-                                         UniqueName="RechnungsadresseStraße" />
+                <telerik:GridBoundColumn DataField="RechnungsadresseStraÃŸe"
+                                         HeaderText="RechnungsstraÃŸe"
+                                         UniqueName="RechnungsadresseStraÃŸe" />
                 <telerik:GridBoundColumn DataField="RechnungsadressePostleitzahl"
                                          HeaderText="Rechnungs-PLZ"
                                          UniqueName="RechnungsadressePostleitzahl" />
@@ -71,8 +90,8 @@
 
                 <telerik:GridEditCommandColumn ButtonType="ImageButton" />
                 <telerik:GridButtonColumn CommandName="Delete"
-                                          Text="Löschen"
-                                          ConfirmText="Wirklich löschen?" />
+                                          Text="LÃ¶schen"
+                                          ConfirmText="Wirklich lÃ¶schen?" />
             </Columns>
         </MasterTableView>
     </telerik:RadGrid>

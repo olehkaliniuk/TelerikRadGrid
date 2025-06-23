@@ -38,9 +38,25 @@
                                               HeaderText="Nachname"
                                               UniqueName="Nachname" />
 
-                    <telerik:GridBoundColumn  DataField="Anrede"
-                                              HeaderText="Anrede"
-                                              UniqueName="Anrede" />
+
+
+                    <telerik:GridTemplateColumn DataField="Anrede"
+                        HeaderText="Anrede"
+                        UniqueName="Anrede">
+                        <EditItemTemplate>
+                            <asp:DropDownList ID="ddlAnrede" runat="server">
+                                <asp:ListItem Text="Herr" Value="Herr" />
+                                <asp:ListItem Text="Frau" Value="Frau" />
+                                <asp:ListItem Text="Divers" Value="Divers" />
+                            </asp:DropDownList>
+                        </EditItemTemplate>
+                        <ItemTemplate>
+                            <%# Eval("Anrede") %>
+                        </ItemTemplate>
+                    </telerik:GridTemplateColumn>
+
+
+
 
                     <telerik:GridCheckBoxColumn DataField="IstAktiv"
                                                 HeaderText="Aktiv?"
