@@ -13,6 +13,8 @@
                     AllowPaging="True"
                     OnNeedDataSource="RadGridAddresses_NeedDataSource"
                     OnItemCommand="RadGridAddresses_ItemCommand"
+
+             
                     AllowFilteringByColumn="true"
                     EnableLinqExpressions="true"
                     FilterDelay="500"
@@ -42,12 +44,18 @@
         </asp:UpdatePanel>
         <hr />
 
-        <!-- toggle form  -->
-        <telerik:RadButton ID="btnToggleForm" runat="server" Text="Show/Hide" OnClick="btnToggleForm_Click" />
+      
 
         <!-- Form  -->
-        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+      
+
+        <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
             <ContentTemplate>
+
+                  <!-- toggle form  -->
+  <telerik:RadButton ID="btnToggleForm" runat="server" Text="Show/Hide" OnClick="btnToggleForm_Click" />
+
+                 <div id="formCont" runat="server" style="display:none"> 
 
                 <!-- Land auswaählen -->
                 <telerik:RadComboBox ID="ddlCountry"
@@ -66,7 +74,11 @@
                 <asp:TextBox ID="Ansprechpartner" runat="server" Placeholder="Ansprechpartner" /><br />
 
                 <telerik:RadButton ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" />
-
+                 </div>
             </ContentTemplate>
         </asp:UpdatePanel>
+
+
+         
+
 </div>

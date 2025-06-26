@@ -50,7 +50,7 @@ namespace UserControls
                 ddlCountry.SelectedValue = "DE";
 
                 BuildDynamicForm("DE");
-                UpdatePanel1.Visible = false;
+                
             }
             else
             {
@@ -83,7 +83,9 @@ namespace UserControls
             hfEditId.Value = "";
             RadGridAddresses.Rebind();
             UpdatePanelGrid.Update();
-            UpdatePanel1.Visible = false;
+
+
+            CloseForm();
         }
 
         protected void RadGridAddresses_NeedDataSource(object sender, GridNeedDataSourceEventArgs e)
@@ -105,6 +107,8 @@ namespace UserControls
             }
             else if (e.CommandName == "Update")
             {
+                
+
                 GridDataItem item = e.Item as GridDataItem;
                 if (item != null)
                 {
@@ -116,6 +120,9 @@ namespace UserControls
 
         private void LoadAddressToForm(int id)
         {
+
+           
+
             var row = repo.GetAddressById(id);
             if (row != null)
             {
@@ -135,10 +142,15 @@ namespace UserControls
                 Ansprechpartner.Text = row["Ansprechpartner"].ToString();
 
                 hfEditId.Value = id.ToString();
-                UpdatePanel1.Visible = true;
+
+
+                ShowForm();
+
+      
             }
         }
 
+  
         private string GetTextBoxValue(string id)
         {
             var tb = phDynamicFields.FindControl(id) as RadTextBox;
@@ -176,8 +188,61 @@ namespace UserControls
 
         protected void btnToggleForm_Click(object sender, EventArgs e)
         {
-            UpdatePanel1.Visible = !UpdatePanel1.Visible;
+            string currentDisplay = formCont.Style["display"];
+
+            if (string.IsNullOrEmpty(currentDisplay) || currentDisplay == "none")
+            {
+                formCont.Style["display"] = "block";
+            }
+            else
+            {
+                formCont.Style["display"] = "none";
+                ClearForm(); 
+            }
+
+            UpdatePanel1.Update();
         }
+
+        private void ShowForm()
+        {
+            formCont.Style["display"] = "block";
+            UpdatePanel1.Update();
+        }
+
+        private void CloseForm()
+        {
+            formCont.Style["display"] = "none";
+            UpdatePanel1.Update();
+            ClearForm();
+        }
+
+        private void ClearForm()
+        {
+            if (phDynamicFields != null)
+            {
+                foreach (Control ctrl in phDynamicFields.Controls)
+                {
+                    RadTextBox rtb = ctrl as RadTextBox;
+                    if (rtb != null)
+                    {
+                        rtb.Text = string.Empty;
+                    }
+                }
+            }
+
+        
+            Firma.Text = string.Empty;
+            Bezeichnung.Text = string.Empty;
+            Ansprechpartner.Text = string.Empty;
+
+   
+            hfEditId.Value = string.Empty;
+
+       
+            ddlCountry.SelectedIndex = 0;
+        }
+
+
 
         protected void ddlCountry_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
         {
