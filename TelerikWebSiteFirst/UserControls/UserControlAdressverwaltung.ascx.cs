@@ -139,7 +139,7 @@ namespace UserControls
             }
             else if (e.CommandName == "Update")
             {
-
+                btnToggleForm.Text = "Close";
                 lblM.Text = "Update";
                 GridDataItem item = e.Item as GridDataItem;
                 if (item != null)

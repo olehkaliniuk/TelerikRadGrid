@@ -1,85 +1,11 @@
 ﻿@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 body {
-    font-family: "Roboto", sans-serif;
-    background-color: #f4f6f9;
-    color: #333333;
+    font-family: "Roboto", sans-serif !important;
+    background-color: #f9f9f9 !important;
+    color: #333333 !important;
 }
 
 
-#formCont {
-    background-color: #f9f9f9; 
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 20px 25px;
-    max-width: 400px; 
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    margin-top: 15px;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
 
-
-    #formCont label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 6px;
-        color: #333;
-    }
-
-
-    #formCont input[type="text"],
-    #formCont input[type="email"],
-    #formCont input[type="tel"],
-    #formCont textarea,
-    #formCont .RadTextBox input {
-        width: 100%;
-        padding: 8px 12px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 14px;
-        box-sizing: border-box;
-        transition: border-color 0.3s ease;
-    }
-
-        #formCont input[type="text"]:focus,
-        #formCont .RadTextBox input:focus {
-            border-color: #0078d7; 
-            outline: none;
-            box-shadow: 0 0 5px rgba(0, 120, 215, 0.5);
-        }
-
-    #formCont .RadComboBox_Default {
-        width: 100% !important;
-        margin-bottom: 15px;
-    }
-
-
-    #formCont .RadButton,
-    #formCont button,
-    #formCont input[type="submit"] {
-        background-color: #0078d7;
-        border: none;
-        color: white;
-        font-weight: 600;
-        padding: 10px 18px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 15px;
-        transition: background-color 0.3s ease;
-    }
-
-        #formCont .RadButton:hover,
-        #formCont button:hover,
-        #formCont input[type="submit"]:hover {
-            background-color: #005a9e;
-        }
-
-    #formCont input::placeholder,
-    #formCont textarea::placeholder {
-        color: #999;
-    }
-
-    #formCont[style*="display:none"] {
-        display: none !important;
-    }
+   
