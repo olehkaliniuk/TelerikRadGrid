@@ -53,9 +53,12 @@
             <ContentTemplate>
 
                   <!-- toggle form  -->
-  <telerik:RadButton ID="btnToggleForm" runat="server" Text="Show/Hide" OnClick="btnToggleForm_Click" />
+  <telerik:RadButton ID="btnToggleForm" runat="server" Text="Create new" OnClick="btnToggleForm_Click" />
 
                  <div id="formCont" runat="server" style="display:none"> 
+
+                    <asp:Label ID="lblM"  runat="server" Text="Insert" Style="font-size: 24px; font-weight: bold;"></asp:Label>
+                     <br />
 
                 <!-- Land auswaählen -->
                 <telerik:RadComboBox ID="ddlCountry"
@@ -76,9 +79,12 @@
                 <telerik:RadButton ID="btnSave" runat="server" Text="Save" OnClick="btnSave_Click" />
                  </div>
             </ContentTemplate>
+            
+
         </asp:UpdatePanel>
 
-
-         
+    
 
 </div>
+
+         

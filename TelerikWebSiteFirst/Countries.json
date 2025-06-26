@@ -5,7 +5,7 @@
       "id": "Ort"
     },
     {
-      "label": "Straße",
+      "label": "Straï¿½e",
       "id": "Strasse"
     },
     {
@@ -17,7 +17,7 @@
       "id": "PLZ"
     },
     {
-      "label": "Gebäude",
+      "label": "Gebï¿½ude",
       "id": "Gebaeude"
     }
   ],
@@ -49,7 +49,7 @@
   ],
   "JP": [
     {
-      "label": "Präfektur",
+      "label": "Prï¿½fektur",
       "id": "Region"
     },
     {
@@ -70,6 +70,28 @@
     },
     {
       "label": "Gebaeude",
+      "id": "Gebaeude"
+    }
+  ],
+  "UA": [
+    {
+      "label": "Ort",
+      "id": "Ort"
+    },
+    {
+      "label": "Straï¿½e",
+      "id": "Strasse"
+    },
+    {
+      "label": "Hausnummer",
+      "id": "Hausnummer"
+    },
+    {
+      "label": "PLZ",
+      "id": "PLZ"
+    },
+    {
+      "label": "Gebï¿½ude",
       "id": "Gebaeude"
     }
   ]

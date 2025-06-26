@@ -1,4 +1,4 @@
-using Microsoft.SqlServer.Server;
+﻿using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -26,6 +26,12 @@ namespace UserControls
             public string id { get; set; }
         }
 
+        public class Country
+        {
+            public string Name { get; set; }
+            public string Code { get; set; }
+        }
+
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
@@ -38,19 +44,27 @@ namespace UserControls
         {
             if (!IsPostBack)
             {
-                string jsonPath = Server.MapPath("~/Countries.json");
-                string jsonContent = File.ReadAllText(jsonPath);
+                // Загрузка полей для форм
+                string jsonPathFields = Server.MapPath("~/Countries.json");
+                string jsonContentFields = File.ReadAllText(jsonPathFields);
                 var serializer = new JavaScriptSerializer();
-                countryFields = serializer.Deserialize<Dictionary<string, List<FieldDefinition>>>(jsonContent);
+                countryFields = serializer.Deserialize<Dictionary<string, List<FieldDefinition>>>(jsonContentFields);
                 Session["countryFields"] = countryFields;
 
-                ddlCountry.Items.Add(new RadComboBoxItem("Deutschland", "DE"));
-                ddlCountry.Items.Add(new RadComboBoxItem("USA", "US"));
-                ddlCountry.Items.Add(new RadComboBoxItem("Japan", "JP"));
-                ddlCountry.SelectedValue = "DE";
+                // Загрузка списка стран из отдельного JSON
+                string jsonPathCountries = Server.MapPath("~/countriesList.json");
+                string jsonContentCountries = File.ReadAllText(jsonPathCountries);
+                var countries = serializer.Deserialize<List<Country>>(jsonContentCountries);
 
-                BuildDynamicForm("DE");
-                
+                ddlCountry.Items.Clear();
+                foreach (Country c in countries)
+                {
+                    ddlCountry.Items.Add(new RadComboBoxItem(c.Name, c.Code));
+                }
+                if (ddlCountry.Items.Count > 0)
+                    ddlCountry.SelectedIndex = 0;
+
+                BuildDynamicForm(ddlCountry.SelectedValue);
             }
             else
             {
@@ -59,24 +73,25 @@ namespace UserControls
             }
         }
 
+
+   
+
         protected void ddlCountry_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
         {
             BuildDynamicForm(e.Value);
         }
 
-        private string GetCountryCodeFromName(string name)
-        {
-            switch (name)
-            {
-                case "Deutschland": return "DE";
-                case "USA": return "US";
-                case "Japan": return "JP";
-                default: return "DE";
-            }
-        }
+     
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
+
+            //validate
+            if (!ValidateForm())
+                return;
+
+
+
             var data = new Dictionary<string, string>
         {
             { "Region", GetTextBoxValue("Region") },
@@ -111,6 +126,7 @@ namespace UserControls
 
         protected void RadGridAddresses_ItemCommand(object sender, GridCommandEventArgs e)
         {
+            lblM.Text = "Insert";
             if (e.CommandName == "Delete")
             {
                 GridDataItem item = e.Item as GridDataItem;
@@ -123,8 +139,8 @@ namespace UserControls
             }
             else if (e.CommandName == "Update")
             {
-                
 
+                lblM.Text = "Update";
                 GridDataItem item = e.Item as GridDataItem;
                 if (item != null)
                 {
@@ -143,7 +159,14 @@ namespace UserControls
             if (row != null)
             {
                 string land = row["Land"].ToString();
-                ddlCountry.SelectedValue = GetCountryCodeFromName(land);
+                foreach (RadComboBoxItem item in ddlCountry.Items)
+                {
+                    if (item.Text == land)
+                    {
+                        ddlCountry.SelectedValue = item.Value;
+                        break;
+                    }
+                }
                 BuildDynamicForm(ddlCountry.SelectedValue);
 
                 SetTextBoxValue("Region", row["Region"].ToString());
@@ -208,11 +231,14 @@ namespace UserControls
 
             if (string.IsNullOrEmpty(currentDisplay) || currentDisplay == "none")
             {
+                lblM.Text = "Insert";
                 formCont.Style["display"] = "block";
+                btnToggleForm.Text = "Close";
             }
             else
             {
                 formCont.Style["display"] = "none";
+                btnToggleForm.Text = "Create new";
                 ClearForm(); 
             }
 
@@ -260,7 +286,44 @@ namespace UserControls
 
 
 
-       
+
+        private bool ValidateForm()
+        {
+            // Проверка динамических полей
+            foreach (Control ctrl in phDynamicFields.Controls)
+            {
+                RadTextBox tb = ctrl as RadTextBox;
+                if (tb != null && string.IsNullOrWhiteSpace(tb.Text))
+                {  
+                    return false;
+                }
+            }
+
+            // Проверка статичных полей
+            if (string.IsNullOrWhiteSpace(Firma.Text) ||
+                string.IsNullOrWhiteSpace(Bezeichnung.Text) ||
+                string.IsNullOrWhiteSpace(Ansprechpartner.Text))
+            {
+                return false;
+            }
+
+            // Проверка выбора страны
+            if (ddlCountry.SelectedItem == null || string.IsNullOrEmpty(ddlCountry.SelectedValue))
+            {
+                return false;
+            }
+
+ 
+            UpdatePanel1.Update();
+
+            return true;
+        }
+
+   
+
+
+
+
 
 
     }
