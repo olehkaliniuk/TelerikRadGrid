@@ -1,0 +1,76 @@
+{
+  "DE": [
+    {
+      "label": "Ort",
+      "id": "Ort"
+    },
+    {
+      "label": "Straﬂe",
+      "id": "Strasse"
+    },
+    {
+      "label": "Hausnummer",
+      "id": "Hausnummer"
+    },
+    {
+      "label": "PLZ",
+      "id": "PLZ"
+    },
+    {
+      "label": "Geb‰ude",
+      "id": "Gebaeude"
+    }
+  ],
+  "US": [
+    {
+      "label": "State",
+      "id": "Region"
+    },
+    {
+      "label": "Ort",
+      "id": "Ort"
+    },
+    {
+      "label": "Strasse",
+      "id": "Strasse"
+    },
+    {
+      "label": "Hausnummer",
+      "id": "Hausnummer"
+    },
+    {
+      "label": "ZIP / PLZ",
+      "id": "PLZ"
+    },
+    {
+      "label": "Gebaeude",
+      "id": "Gebaeude"
+    }
+  ],
+  "JP": [
+    {
+      "label": "Pr‰fektur",
+      "id": "Region"
+    },
+    {
+      "label": "Ort",
+      "id": "Ort"
+    },
+    {
+      "label": "Strasse",
+      "id": "Strasse"
+    },
+    {
+      "label": "Hausnummer",
+      "id": "Hausnummer"
+    },
+    {
+      "label": "PLZ",
+      "id": "PLZ"
+    },
+    {
+      "label": "Gebaeude",
+      "id": "Gebaeude"
+    }
+  ]
+}

@@ -1,96 +1,200 @@
+using Microsoft.SqlServer.Server;
 using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Web.Script.Serialization;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 using Telerik.Web.UI;
-using Telerik.Web.UI.Skins;
+using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
 
 
 namespace UserControls
 {
     public partial class UserControlAdressverwaltung : System.Web.UI.UserControl
     {
-        protected void RadGridAdresse_NeedDataSource(object sender, GridNeedDataSourceEventArgs e)
+        private AddressRepository repo = new AddressRepository();
+        private Dictionary<string, List<FieldDefinition>> countryFields;
+
+        public class FieldDefinition
         {
-            var repo = new RepAdresse();
-            RadGridAdresse.DataSource = repo.GetAllAdress();
+            public string label { get; set; }
+            public string id { get; set; }
         }
 
-        protected void RadGridAdresse_InsertCommand(object sender, GridCommandEventArgs e)
+        protected override void OnInit(EventArgs e)
         {
-            var editableItem = (GridEditableItem)e.Item;
-            var repo = new RepAdresse();
+            base.OnInit(e);
+            countryFields = Session["countryFields"] as Dictionary<string, List<FieldDefinition>>;
+            if (countryFields != null && ddlCountry != null && !string.IsNullOrEmpty(ddlCountry.SelectedValue))
+                BuildDynamicForm(ddlCountry.SelectedValue);
+        }
 
-            Adresse a = new Adresse
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
             {
-                Bezeichnung = (editableItem["Bezeichnung"].Controls[0] as TextBox).Text,
-                Strasse = (editableItem["Strasse"].Controls[0] as TextBox).Text,
-                Hausnummer = (editableItem["Hausnummer"].Controls[0] as TextBox).Text,
-                Postleitzahl = (editableItem["Postleitzahl"].Controls[0] as TextBox).Text,
-                Land = (editableItem["Land"].FindControl("ddlLand") as System.Web.UI.WebControls.DropDownList).SelectedValue,
-                Iban = (editableItem["Iban"].Controls[0] as TextBox).Text,
-                Bic = (editableItem["Bic"].Controls[0] as TextBox).Text,
-                IstInsolvent = (editableItem["IstInsolvent"].Controls[0] as CheckBox).Checked,
-                IstAktiv = (editableItem["IstAktiv"].Controls[0] as CheckBox).Checked,
-                AnsprechpartnerName = (editableItem["AnsprechpartnerName"].Controls[0] as TextBox).Text,
-                AnsprechpartnerTelefonnummer = (editableItem["AnsprechpartnerTelefonnummer"].Controls[0] as TextBox).Text,
-                RechnungsadresseAnschrift = (editableItem["RechnungsadresseAnschrift"].Controls[0] as TextBox).Text,
-                RechnungsadresseStraﬂe = (editableItem["RechnungsadresseStraﬂe"].Controls[0] as TextBox).Text,
-                RechnungsadressePostleitzahl = (editableItem["RechnungsadressePostleitzahl"].Controls[0] as TextBox).Text,
-                RechnungsadresseLand = (editableItem["RechnungsadresseLand"].Controls[0] as TextBox).Text,
-                Stadt = (editableItem["Stadt"].Controls[0] as TextBox).Text,
-            };
+                string jsonPath = Server.MapPath("~/Countries.json");
+                string jsonContent = File.ReadAllText(jsonPath);
+                var serializer = new JavaScriptSerializer();
+                countryFields = serializer.Deserialize<Dictionary<string, List<FieldDefinition>>>(jsonContent);
+                Session["countryFields"] = countryFields;
 
-            repo.AdresseHinzufuegen(a);
-        }
+                ddlCountry.Items.Add(new RadComboBoxItem("Deutschland", "DE"));
+                ddlCountry.Items.Add(new RadComboBoxItem("USA", "US"));
+                ddlCountry.Items.Add(new RadComboBoxItem("Japan", "JP"));
+                ddlCountry.SelectedValue = "DE";
 
-
-        protected void RadGridAdresse_UpdateCommand(object sender, GridCommandEventArgs e)
-        {
-            var editableItem = (GridEditableItem)e.Item;
-            var repo = new RepAdresse();
-
-            Adresse a = new Adresse
+                BuildDynamicForm("DE");
+                UpdatePanel1.Visible = false;
+            }
+            else
             {
-                Id = Convert.ToInt32(editableItem.GetDataKeyValue("Id")),
-                Bezeichnung = (editableItem["Bezeichnung"].Controls[0] as TextBox).Text,
-                Strasse = (editableItem["Strasse"].Controls[0] as TextBox).Text,
-                Hausnummer = (editableItem["Hausnummer"].Controls[0] as TextBox).Text,
-                Postleitzahl = (editableItem["Postleitzahl"].Controls[0] as TextBox).Text,
-                Land = (editableItem["Land"].FindControl("ddlLand") as System.Web.UI.WebControls.DropDownList).SelectedValue,
-                Iban = (editableItem["Iban"].Controls[0] as TextBox).Text,
-                Bic = (editableItem["Bic"].Controls[0] as TextBox).Text,
-                IstInsolvent = (editableItem["IstInsolvent"].Controls[0] as CheckBox).Checked,
-                IstAktiv = (editableItem["IstAktiv"].Controls[0] as CheckBox).Checked,
-                AnsprechpartnerName = (editableItem["AnsprechpartnerName"].Controls[0] as TextBox).Text,
-                AnsprechpartnerTelefonnummer = (editableItem["AnsprechpartnerTelefonnummer"].Controls[0] as TextBox).Text,
-                RechnungsadresseAnschrift = (editableItem["RechnungsadresseAnschrift"].Controls[0] as TextBox).Text,
-                RechnungsadresseStraﬂe = (editableItem["RechnungsadresseStraﬂe"].Controls[0] as TextBox).Text,
-                RechnungsadressePostleitzahl = (editableItem["RechnungsadressePostleitzahl"].Controls[0] as TextBox).Text,
-                RechnungsadresseLand = (editableItem["RechnungsadresseLand"].Controls[0] as TextBox).Text,
-                Stadt = (editableItem["Stadt"].Controls[0] as TextBox).Text,
-            };
-
-            repo.AdresseAktualisieren(a);
+                countryFields = Session["countryFields"] as Dictionary<string, List<FieldDefinition>>;
+                BuildDynamicForm(ddlCountry.SelectedValue);
+            }
         }
 
-
-
-        protected void RadGridAdresse_DeleteCommand(object sender, GridCommandEventArgs e)
+        protected void btnSave_Click(object sender, EventArgs e)
         {
-            var item = (GridDataItem)e.Item;
-            int id = Convert.ToInt32(item.GetDataKeyValue("Id"));
-            var repo = new RepAdresse();
-            repo.AdresseLoeschen(id);
+            var data = new Dictionary<string, string>
+        {
+            { "Region", GetTextBoxValue("Region") },
+            { "Strasse", GetTextBoxValue("Strasse") },
+            { "Hausnummer", GetTextBoxValue("Hausnummer") },
+            { "PLZ", GetTextBoxValue("PLZ") },
+            { "Ort", GetTextBoxValue("Ort") },
+            { "Gebaeude", GetTextBoxValue("Gebaeude") }
+        };
+
+            string firma = Firma.Text;
+            string bezeichnung = Bezeichnung.Text;
+            string land = ddlCountry.SelectedItem.Text;
+            string ansprechpartner = Ansprechpartner.Text;
+
+            int? id = string.IsNullOrEmpty(hfEditId.Value) ? null : (int?)System.Convert.ToInt32(hfEditId.Value);
+
+            repo.SaveAddress(data, firma, bezeichnung, land, ansprechpartner, id);
+
+            hfEditId.Value = "";
+            RadGridAddresses.Rebind();
+            UpdatePanelGrid.Update();
+            UpdatePanel1.Visible = false;
         }
 
+        protected void RadGridAddresses_NeedDataSource(object sender, GridNeedDataSourceEventArgs e)
+        {
+            RadGridAddresses.DataSource = repo.GetAllAddresses();
+        }
 
+        protected void RadGridAddresses_ItemCommand(object sender, GridCommandEventArgs e)
+        {
+            if (e.CommandName == "Delete")
+            {
+                GridDataItem item = e.Item as GridDataItem;
+                if (item != null)
+                {
+                    int id = System.Convert.ToInt32(item.GetDataKeyValue("Id"));
+                    repo.DeleteAddress(id);
+                    RadGridAddresses.Rebind();
+                }
+            }
+            else if (e.CommandName == "Update")
+            {
+                GridDataItem item = e.Item as GridDataItem;
+                if (item != null)
+                {
+                    int id = System.Convert.ToInt32(item.GetDataKeyValue("Id"));
+                    LoadAddressToForm(id);
+                }
+            }
+        }
 
+        private void LoadAddressToForm(int id)
+        {
+            var row = repo.GetAddressById(id);
+            if (row != null)
+            {
+                string land = row["Land"].ToString();
+                ddlCountry.SelectedValue = GetCountryCodeFromName(land);
+                BuildDynamicForm(ddlCountry.SelectedValue);
 
+                SetTextBoxValue("Region", row["Region"].ToString());
+                SetTextBoxValue("Ort", row["Ort"].ToString());
+                SetTextBoxValue("Strasse", row["Strasse"].ToString());
+                SetTextBoxValue("Hausnummer", row["Hausnummer"].ToString());
+                SetTextBoxValue("PLZ", row["PLZ"].ToString());
+                SetTextBoxValue("Gebaeude", row["Gebaeude"].ToString());
 
+                Firma.Text = row["Firma"].ToString();
+                Bezeichnung.Text = row["Bezeichnung"].ToString();
+                Ansprechpartner.Text = row["Ansprechpartner"].ToString();
 
+                hfEditId.Value = id.ToString();
+                UpdatePanel1.Visible = true;
+            }
+        }
 
+        private string GetTextBoxValue(string id)
+        {
+            var tb = phDynamicFields.FindControl(id) as RadTextBox;
+            return tb != null ? tb.Text : "";
+        }
+
+        private void SetTextBoxValue(string id, string value)
+        {
+            RadTextBox tb = phDynamicFields.FindControl(id) as RadTextBox;
+            if (tb != null) tb.Text = value;
+        }
+
+        private void BuildDynamicForm(string countryCode)
+        {
+            phDynamicFields.Controls.Clear();
+
+            if (countryFields != null)
+            {
+                List<FieldDefinition> fields;
+                if (countryFields.TryGetValue(countryCode, out fields))
+                {
+                    foreach (var field in fields)
+                        AddTextbox(field.label, field.id);
+                }
+            }
+        }
+
+        private void AddTextbox(string label, string id)
+        {
+            phDynamicFields.Controls.Add(new LiteralControl(string.Format("<label for='{0}'>{1}</label><br/>", id, label)));
+            var tb = new RadTextBox { ID = id, Width = new Unit(300, UnitType.Pixel) };
+            phDynamicFields.Controls.Add(tb);
+            phDynamicFields.Controls.Add(new LiteralControl("<br /><br />"));
+        }
+
+        protected void btnToggleForm_Click(object sender, EventArgs e)
+        {
+            UpdatePanel1.Visible = !UpdatePanel1.Visible;
+        }
+
+        protected void ddlCountry_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
+        {
+            BuildDynamicForm(e.Value);
+        }
+
+        private string GetCountryCodeFromName(string name)
+        {
+            switch (name)
+            {
+                case "Deutschland": return "DE";
+                case "USA": return "US";
+                case "Japan": return "JP";
+                default: return "DE";
+            }
+        }
 
 
     }
-
-
 }
