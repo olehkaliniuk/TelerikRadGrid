@@ -10,7 +10,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <script src="adressForm.js" type="text/javascript"></script>
-    <link href="style/main2.css" rel="stylesheet" type="text/css" />
+    <link href="style/main.css" rel="stylesheet" type="text/css" />
     <title></title>
     <telerik:RadStyleSheetManager id="RadStyleSheetManager1" runat="server" />
 </head>
@@ -23,9 +23,9 @@
             <asp:ScriptReference Assembly="Telerik.Web.UI" Name="Telerik.Web.UI.Common.jQueryInclude.js" />
         </Scripts>
     </telerik:RadScriptManager>
-    <script type="text/javascript">
+        <script type="text/javascript">
 
-    </script>
+        </script>
     <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
     </telerik:RadAjaxManager>
     <div class="form2">

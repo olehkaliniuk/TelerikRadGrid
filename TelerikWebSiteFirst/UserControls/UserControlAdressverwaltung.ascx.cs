@@ -59,6 +59,22 @@ namespace UserControls
             }
         }
 
+        protected void ddlCountry_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
+        {
+            BuildDynamicForm(e.Value);
+        }
+
+        private string GetCountryCodeFromName(string name)
+        {
+            switch (name)
+            {
+                case "Deutschland": return "DE";
+                case "USA": return "US";
+                case "Japan": return "JP";
+                default: return "DE";
+            }
+        }
+
         protected void btnSave_Click(object sender, EventArgs e)
         {
             var data = new Dictionary<string, string>
@@ -244,21 +260,7 @@ namespace UserControls
 
 
 
-        protected void ddlCountry_SelectedIndexChanged(object sender, RadComboBoxSelectedIndexChangedEventArgs e)
-        {
-            BuildDynamicForm(e.Value);
-        }
-
-        private string GetCountryCodeFromName(string name)
-        {
-            switch (name)
-            {
-                case "Deutschland": return "DE";
-                case "USA": return "US";
-                case "Japan": return "JP";
-                default: return "DE";
-            }
-        }
+       
 
 
     }
